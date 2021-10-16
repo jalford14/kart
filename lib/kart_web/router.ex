@@ -17,7 +17,7 @@ defmodule KartWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/oauth", OauthController, :index
+    get "/oauth", OauthController, :sign_in
   end
 
   # Other scopes may use custom stacks.

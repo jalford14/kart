@@ -20,8 +20,7 @@ defmodule Kart.MixProject do
   def application do
     [
       mod: {Kart.Application, []},
-      extra_applications: [:logger, :runtime_tools],
-      applications: [:logger, :oauth2]
+      extra_applications: [:logger, :runtime_tools, :oauth2]
     ]
   end
 
