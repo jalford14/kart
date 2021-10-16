@@ -1,12 +1,11 @@
 defmodule KartWeb.OauthController do
   use KartWeb, :controller
 
+  alias Kart.Repo
+  alias Kart.User
+
   def index(conn, _params) do
     render(conn, "index.html", token: get_token!())
-  end
-
-  def sign_in(conn, _params) do
-    redirect(conn, external: get_token!())
   end
 
   defp client do
@@ -26,8 +25,17 @@ defmodule KartWeb.OauthController do
   end
 
   defp get_token! do
-    OAuth2.Client.merge_params(client(), strategy: OAuth2.Strategy.ClientCredentials)
-    OAuth2.Client.get_token!(client()).token.access_token
+    client = Map.merge(client(), %{strategy: OAuth2.Strategy.ClientCredentials})
+
+    OAuth2.Client.get_token!(client).token.access_token
+    |> persist_token()
+  end
+
+  defp persist_token(response) do
+    decoded_response = Jason.decode!(response)
+    user = %User{access_token: decoded_response["access_token"]}
+
+    Repo.insert(user)
   end
 
   defp refresh_client do

@@ -12,7 +12,7 @@ defmodule Kart.User do
   end
 
   @doc false
-  def changeset(%User{} = user, attrs) do
+  def changeset(user, attrs) do
     user
     |> cast(attrs, [:first_name, :last_name, :access_token, :refresh_token])
     |> validate_required([])
