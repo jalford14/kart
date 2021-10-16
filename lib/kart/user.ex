@@ -3,10 +3,10 @@ defmodule Kart.User do
   import Ecto.Changeset
 
   schema "users" do
+    field :email, :string
+    field :encrypted_password, :string
     field :first_name, :string
     field :last_name, :string
-    field :access_token, :string
-    field :refresh_token, :string
 
     timestamps()
   end
@@ -14,7 +14,8 @@ defmodule Kart.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :access_token, :refresh_token])
-    |> validate_required([])
+    |> cast(attrs, [:first_name, :last_name, :email, :encrypted_password])
+    |> validate_required([:email])
+    |> unique_constraint(:email)
   end
 end

@@ -28,14 +28,14 @@ defmodule KartWeb.OauthController do
     client = Map.merge(client(), %{strategy: OAuth2.Strategy.ClientCredentials})
 
     OAuth2.Client.get_token!(client).token.access_token
-    |> persist_token()
+    # |> persist_token()
   end
 
   defp persist_token(response) do
-    decoded_response = Jason.decode!(response)
-    user = %User{access_token: decoded_response["access_token"]}
+    # decoded_response = Jason.decode!(response)
+    # user = %User{access_token: decoded_response["access_token"]}
 
-    Repo.insert(user)
+    #Repo.insert(user)
   end
 
   defp refresh_client do

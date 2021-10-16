@@ -18,6 +18,7 @@ defmodule KartWeb.Router do
 
     get "/", PageController, :index
     get "/oauth", OauthController, :index
+    resources "/registrations", UserController, only: [:create, :new]
   end
 
   # Other scopes may use custom stacks.
