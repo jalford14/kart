@@ -1,4 +1,4 @@
-defmodule Kart.Repo.Migrations.CreateUsersTable do
+defmodule Kart.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do
@@ -7,6 +7,9 @@ defmodule Kart.Repo.Migrations.CreateUsersTable do
       add :last_name, :string
       add :access_token, :string
       add :refresh_token, :string
+
+      timestamps()
     end
+
   end
 end

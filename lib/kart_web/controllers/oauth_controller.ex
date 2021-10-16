@@ -26,12 +26,12 @@ defmodule KartWeb.OauthController do
   end
 
   defp get_token! do
-    OAuth2.Client.merge_params(strategy: OAuth2.Strategy.ClientCredentials)
+    OAuth2.Client.merge_params(client(), strategy: OAuth2.Strategy.ClientCredentials)
     OAuth2.Client.get_token!(client()).token.access_token
   end
 
   defp refresh_client do
-    OAuth2.Client.merge_params(strategy: OAuth2.Strategy.Refresh)
+    OAuth2.Client.merge_params(client(), strategy: OAuth2.Strategy.Refresh)
   end 
 
   defp params do
