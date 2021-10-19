@@ -3,10 +3,38 @@ defmodule KartWeb.OauthController do
 
   alias Kart.Repo
   alias Kart.User
+  alias Kart.Accounts
+  alias Kart.OauthToken
 
   def index(conn, _params) do
-    render(conn, "index.html", token: get_token!())
+    render(conn, "index.html", token: "Token inserted!")
   end
+
+  defp get_token!(conn) do
+    client = Map.merge(client(), %{strategy: OAuth2.Strategy.ClientCredentials})
+    user = get_session(conn, :user_token)
+           |> Accounts.get_user_by_session_token()
+    
+    OAuth2.Client.get_token!(client).token.access_token
+    |> persist_token(user)
+  end
+
+  defp persist_token(response, user) do
+    decoded_response = Jason.decode!(response)
+    oauth_token = %OauthToken{
+      access_token: decoded_response["access_token"],
+      user_id: user.id
+    }
+
+    case Repo.get_by(OauthToken, user_id: user.id) do
+      nil -> Repo.insert(oauth_token)
+      token -> Repo.update(token)
+    end
+  end
+
+  defp refresh_client do
+    OAuth2.Client.merge_params(client(), strategy: OAuth2.Strategy.Refresh)
+  end 
 
   defp client do
     OAuth2.Client.new([
@@ -19,33 +47,8 @@ defmodule KartWeb.OauthController do
     ])
   end
 
-  defp authorize_url! do
-    scoped_client = OAuth2.Client.merge_params(client(), params())
-    OAuth2.Client.authorize_url!(scoped_client)
-  end
-
-  defp get_token! do
-    client = Map.merge(client(), %{strategy: OAuth2.Strategy.ClientCredentials})
-
-    OAuth2.Client.get_token!(client).token.access_token
-    # |> persist_token()
-  end
-
-  defp persist_token(response) do
-    # decoded_response = Jason.decode!(response)
-    # user = %User{access_token: decoded_response["access_token"]}
-
-    #Repo.insert(user)
-  end
-
-  defp refresh_client do
-    OAuth2.Client.merge_params(client(), strategy: OAuth2.Strategy.Refresh)
-  end 
-
-  defp params do
-    %{
-      response_type: "code",
-      scope: "cart.basic:write"
-    }
+  defp user(conn) do
+    get_session(conn, :user_token)
+    |> Accounts.get_user_by_session_token()
   end
 end

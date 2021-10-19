@@ -1,5 +1,5 @@
 <section class="row">
-  <a href="/api/oauth">
-    Oauth Flow
+  <a href="/oauth">
+    Connect to Kroger
   </a>
 </section>

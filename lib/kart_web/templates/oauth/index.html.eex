@@ -1,1 +1,2 @@
 <h1> Oauth Token </h1>
+<%= @token %>
