@@ -1,5 +1,8 @@
 <section class="row">
+  <a href="/oauth/authorize">
+    Authroize Url
+  </a>
   <a href="/oauth">
-    Connect to Kroger
+    Get token
   </a>
 </section>

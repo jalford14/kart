@@ -16,13 +16,6 @@ defmodule KartWeb.Router do
     plug :accepts, ["json"]
   end
 
-  #scope "/", KartWeb do
-  #  pipe_through :browser
-
-  #  get "/", PageController, :index
-  #  resources "/registrations", UserController, only: [:create, :new]
-  #end
-
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 
@@ -52,6 +45,7 @@ defmodule KartWeb.Router do
 
     get "/", PageController, :index
     get "/oauth", OauthController, :index
+    get "/oauth/authorize", OauthController, :authorize
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
