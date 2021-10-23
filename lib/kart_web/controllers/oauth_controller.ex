@@ -52,7 +52,7 @@ defmodule KartWeb.OauthController do
       site: "https://api.kroger.com/v1/connect",
       authorize_url: "/oauth2/authorize",
       token_url: "/oauth2/token",
-      redirect_uri: "https://localhost:4000/",
+      redirect_uri: "https://kart.ngrok.io",
       params: %{
         response_type: "code",
         scope: "product.compact"
