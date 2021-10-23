@@ -1,8 +1,6 @@
 defmodule KartWeb.ItemsLive do
   use KartWeb, :live_view
 
-  @topic "game"
-
   @impl true
   def mount(_params, _session, socket) do
     KartWeb.Endpoint.subscribe(@topic)
@@ -42,4 +40,3 @@ defmodule KartWeb.ItemsLive do
     """
   end
 end
-
