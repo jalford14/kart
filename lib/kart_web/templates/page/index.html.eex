@@ -1,8 +1,9 @@
 <section class="row">
-  <a href="/oauth/authorize">
-    Authroize Url
-  </a>
-  <a href="/oauth">
-    Get token
-  </a>
+  <ul>
+    <li>
+      <a href="/oauth/authorize">
+        Authroize Url
+      </a>
+    </li>
+  </ul>
 </section>
