@@ -47,8 +47,8 @@ defmodule KartWeb.OauthController do
 
   defp client do
     OAuth2.Client.new([
-      client_id: Application.fetch_env!(:oauth2_credentials, :client_id),
-      client_secret: Application.fetch_env!(:oauth2_credentials, :client_secret),
+      client_id: System.get_env("CLIENT_ID"),
+      client_secret: System.get_env("CLIENT_SECRET"),
       site: "https://api.kroger.com/v1/connect",
       authorize_url: "/oauth2/authorize",
       token_url: "/oauth2/token",
