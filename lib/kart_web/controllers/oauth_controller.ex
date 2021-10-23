@@ -8,14 +8,13 @@ defmodule KartWeb.OauthController do
   alias Kart.OauthToken
 
   def index(conn, _params) do
-    get_token!(conn)
     render(conn, "index.html", token: "inserted!")
   end
 
   def callback(conn, params) do
     case params do
       %{"code" => code} -> get_token!(conn, code)
-      _ -> redirect(to: "/")
+      _ -> redirect(conn, to: "/")
     end
 
     render(conn, "index.html", token: "inserted!")
@@ -30,12 +29,13 @@ defmodule KartWeb.OauthController do
       get_session(conn, :user_token)
       |> Accounts.get_user_by_session_token()
 
-    OAuth2.Client.get_token!(client, code: code).token
+    OAuth2.Client.get_token!(client, code: code).token.access_token
     |> persist_token(user)
   end
 
   defp persist_token(response, user) do
     decoded_response = Jason.decode!(response)
+    IO.inspect(decoded_response)
 
     oauth_token = %OauthToken{
       access_token: decoded_response["access_token"],
@@ -48,8 +48,11 @@ defmodule KartWeb.OauthController do
         nil ->
           Repo.insert(oauth_token)
 
-        token ->
-          Ecto.Changeset.change(token, access_token: decoded_response["access_token"])
+        token_record ->
+          Ecto.Changeset.change(token_record, %{
+            access_token: decoded_response["access_token"],
+            refresh_token: decoded_response["refresh_token"]
+          })
           |> Repo.update()
       end
   end
