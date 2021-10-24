@@ -24,6 +24,7 @@ defmodule KartWeb do
       import Plug.Conn
       import KartWeb.Gettext
       alias KartWeb.Router.Helpers, as: Routes
+      import Phoenix.LiveView.Controller
     end
   end
 
@@ -38,6 +39,24 @@ defmodule KartWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+      import Phoenix.LiveView.Helpers
+    end
+  end
+
+    def live_view do
+    quote do
+      use Phoenix.LiveView,
+        layout: {KartWeb.LayoutView, "live.html"}
+
+      unquote(view_helpers())
+    end
+  end
+
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+
+      unquote(view_helpers())
     end
   end
 
@@ -47,6 +66,7 @@ defmodule KartWeb do
 
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 
@@ -61,6 +81,8 @@ defmodule KartWeb do
     quote do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
+
+      import Phoenix.LiveView.Helpers
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View

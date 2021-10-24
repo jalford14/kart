@@ -6,10 +6,11 @@ defmodule KartWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :put_root_layout, {KartWeb.LayoutView, :root}
   end
 
   pipeline :api do
@@ -48,6 +49,8 @@ defmodule KartWeb.Router do
     get "/oauth", OauthController, :index
     get "/oauth/authorize", OauthController, :authorize
     get "/oauth/callback", OauthController, :callback
+
+    live "/search", ProductsLive
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update

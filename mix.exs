@@ -42,6 +42,7 @@ defmodule Kart.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:phoenix_live_view, "~> 0.12.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
@@ -49,7 +50,8 @@ defmodule Kart.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:oauth2, "~> 2.0"},
       {:mox, "~> 1.0", only: :test},
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 1.8"},
+      {:floki, ">= 0.0.0", only: :test}
     ]
   end
 
