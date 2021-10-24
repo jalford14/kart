@@ -5,7 +5,7 @@ defmodule KartWeb.ProductsLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: nil, products: nil)}
+    {:ok, assign(socket, query: nil, products: [])}
   end
 
   @impl true
@@ -17,7 +17,7 @@ defmodule KartWeb.ProductsLive do
   def render(assigns) do
     ~L"""
     <form phx-change="search">
-      <input type="text" name="q" value={@query} placeholder="Search..."/>
+      <input phx-debounce="2000" type="text" name="query" value="<%= @query %>" placeholder="Search..."/>
       <datalist id="products">
         <%= for product <- @products do %>
           <option value={product}><%= product %></option>

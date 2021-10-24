@@ -2,7 +2,12 @@
   <ul>
     <li>
       <a href="/oauth/authorize">
-        Authroize Url
+        Authorize Url
+      </a>
+    </li>
+    <li>
+      <a href="/search">
+        Search Products
       </a>
     </li>
   </ul>

@@ -50,7 +50,7 @@ defmodule KartWeb.Router do
     get "/oauth/authorize", OauthController, :authorize
     get "/oauth/callback", OauthController, :callback
 
-    live "/search", ProductsLive
+    live "/search", ProductsLive, :index
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
