@@ -1,6 +1,9 @@
 defmodule Kart.OauthToken do
   use Ecto.Schema
   import Ecto.Changeset
+  
+  import Ecto.Query, warn: false
+  alias Kart.Repo
 
   schema "oauth_tokens" do
     field :access_token, :string
@@ -9,6 +12,10 @@ defmodule Kart.OauthToken do
 
     timestamps()
   end
+
+  def get_access_token_by_user(user) do
+    Repo.get_by(Kart.OauthToken, user_id: 1).access_token
+  end 
 
   @doc false
   def changeset(oauth_token, attrs) do
