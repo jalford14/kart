@@ -6,6 +6,7 @@ defmodule KartWeb.OauthController do
   alias Kart.User
   alias Kart.Accounts
   alias Kart.OauthToken
+  alias Kroger.Utilities.Api
 
   def index(conn, _params) do
     render(conn, "index.html", token: "inserted!")
@@ -13,7 +14,10 @@ defmodule KartWeb.OauthController do
 
   def callback(conn, params) do
     case params do
-      %{"code" => code} -> get_token!(conn, code)
+      %{"code" => code} -> 
+        get_session(conn, :user_token)
+        |> Api.get_token!(code)
+
       _ -> redirect(conn, to: "/")
     end
 
@@ -21,63 +25,7 @@ defmodule KartWeb.OauthController do
   end
 
   def authorize(conn, _params) do
-    redirect(conn, external: authorize_url!)
+    redirect(conn, external: Api.authorize_url!)
   end
 
-  defp get_token!(conn, code) do
-    user =
-      get_session(conn, :user_token)
-      |> Accounts.get_user_by_session_token()
-
-    OAuth2.Client.get_token!(client, code: code).token.access_token
-    |> persist_token(user)
-  end
-
-  defp persist_token(response, user) do
-    decoded_response = Jason.decode!(response)
-    IO.inspect(decoded_response)
-
-    oauth_token = %OauthToken{
-      access_token: decoded_response["access_token"],
-      refresh_token: decoded_response["refresh_token"],
-      user_id: user.id
-    }
-
-    oauth_changes =
-      case Repo.get_by(OauthToken, user_id: user.id) do
-        nil ->
-          Repo.insert(oauth_token)
-
-        token_record ->
-          Ecto.Changeset.change(token_record, %{
-            access_token: decoded_response["access_token"],
-            refresh_token: decoded_response["refresh_token"]
-          })
-          |> Repo.update()
-      end
-  end
-
-  defp authorize_url! do
-    OAuth2.Client.authorize_url!(client())
-  end
-
-  defp client do
-    OAuth2.Client.new(
-      client_id: System.get_env("CLIENT_ID"),
-      client_secret: System.get_env("CLIENT_SECRET"),
-      site: "https://api.kroger.com/v1/connect",
-      authorize_url: "/oauth2/authorize",
-      token_url: "/oauth2/token",
-      redirect_uri: "https://kart.ngrok.io/oauth/callback",
-      params: %{
-        response_type: "code",
-        scope: "product.compact"
-      }
-    )
-  end
-
-  defp user(conn) do
-    get_session(conn, :user_token)
-    |> Accounts.get_user_by_session_token()
-  end
 end

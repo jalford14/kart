@@ -1,9 +1,8 @@
 defmodule Kroger.ProductSearch do
-  alias Kroger.Utilities.ApiRequest
+  alias Kroger.Utilities.Api
+  alias Kart.OauthToken
 
   def call(user_token, params) do
-    IO.puts("ProductSearch")
-    ApiRequest.call(user_token, "/products", params) 
-    |> IO.inspect(label: "bhadhffiahefiawe")
+    Api.make_request(user_token, "/products", params)
   end
 end
