@@ -43,7 +43,7 @@ defmodule KartWeb do
     end
   end
 
-    def live_view do
+  def live_view do
     quote do
       use Phoenix.LiveView,
         layout: {KartWeb.LayoutView, "live.html"}

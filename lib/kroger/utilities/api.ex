@@ -12,7 +12,7 @@ defmodule Kroger.Utilities.Api do
       method: :get,
       url: url_base <> path,
       headers: headers(user_token),
-      params: params,
+      params: params
     }
     |> execute(user_token)
   end
@@ -73,7 +73,7 @@ defmodule Kroger.Utilities.Api do
         token_record ->
           Ecto.Changeset.change(token_record, %{
             access_token: response.access_token,
-            refresh_token: response.refresh_token,
+            refresh_token: response.refresh_token
           })
           |> Repo.update()
       end
@@ -110,6 +110,6 @@ defmodule Kroger.Utilities.Api do
     [
       {"Accept", "application/json"},
       {"Authorization", "Bearer #{get_user_access_token(user_token)}"}
-    ] 
+    ]
   end
 end

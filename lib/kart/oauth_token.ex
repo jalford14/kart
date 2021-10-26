@@ -1,7 +1,7 @@
 defmodule Kart.OauthToken do
   use Ecto.Schema
   import Ecto.Changeset
-  
+
   import Ecto.Query, warn: false
   alias Kart.Repo
 
@@ -15,7 +15,7 @@ defmodule Kart.OauthToken do
 
   def get_access_token_by_user(user) do
     Repo.get_by(Kart.OauthToken, user_id: 1).access_token
-  end 
+  end
 
   @doc false
   def changeset(oauth_token, attrs) do

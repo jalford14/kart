@@ -14,18 +14,18 @@ defmodule KartWeb.OauthController do
 
   def callback(conn, params) do
     case params do
-      %{"code" => code} -> 
+      %{"code" => code} ->
         get_session(conn, :user_token)
         |> Api.get_token!(code)
 
-      _ -> redirect(conn, to: "/")
+      _ ->
+        redirect(conn, to: "/")
     end
 
     render(conn, "index.html", token: "inserted!")
   end
 
   def authorize(conn, _params) do
-    redirect(conn, external: Api.authorize_url!)
+    redirect(conn, external: Api.authorize_url!())
   end
-
 end
