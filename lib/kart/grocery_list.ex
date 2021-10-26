@@ -3,10 +3,7 @@ defmodule Kart.GroceryList do
   import Ecto.Changeset
 
   schema "grocery_lists" do
-    field :brand, :string
-    field :description, :string
-    field :image_url, :string
-    field :product_id, :string
+    field :name, :string
     field :user_id, :id
 
     timestamps()
@@ -15,7 +12,7 @@ defmodule Kart.GroceryList do
   @doc false
   def changeset(grocery_list, attrs) do
     grocery_list
-    |> cast(attrs, [:product_id, :brand, :description, :image_url])
-    |> validate_required([:product_id, :brand, :description, :image_url])
+    |> cast(attrs, [:name, :user_id])
+    |> validate_required([:name, :user_id])
   end
 end

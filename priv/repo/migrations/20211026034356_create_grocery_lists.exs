@@ -3,10 +3,7 @@ defmodule Kart.Repo.Migrations.CreateGroceryLists do
 
   def change do
     create table(:grocery_lists) do
-      add :product_id, :string
-      add :brand, :string
-      add :description, :text
-      add :image_url, :string
+      add :name, :string
       add :user_id, references(:users, on_delete: :nothing), null: false
 
       timestamps()
