@@ -9,10 +9,16 @@ defmodule KartWeb.ProductsLive do
   end
 
   @impl true
+  def handle_event("search", %{"query" => ""}, socket) do
+    {:noreply, assign(socket, products: [])}
+  end
+
+  @impl true
   def handle_event("search", %{"query" => query}, socket) do
     products = socket.assigns[:user_token]
-               |> ProductSearch.call(%{"filter.term" => query, "filter.locationId" => "01100461", "filter.limit" => 15})
+               |> ProductSearch.call(%{"filter.term" => query, "filter.locationId" => "01100461", "filter.limit" => 5})
 
+    IO.inspect(products)
     {:noreply, assign(socket, products: products)}
   end
 
@@ -20,11 +26,20 @@ defmodule KartWeb.ProductsLive do
     ~L"""
     <form phx-change="search">
       <input phx-debounce="1000" type="text" name="query" value="<%= @query %>" placeholder="Search..."/>
-      <datalist id="products">
-        <%= for product <- @products do %>
-          <option value={product}><%= product %></option>
+      <p> Products <%= for product <- @products do %> </p>
+        <%= product["brand"] %>
+        <%= product["description"] %>
+        <%= product["productId"] %>
+        <%= for image <- product["images"] do %>
+          <%= if image["featured"] do %>
+            <%= for preview <- image["sizes"] do %>
+              <%= if preview["size"] == "small" do %>
+                <img src="<%= preview["url"] %>">
+              <% end %>
+            <% end %>
+          <% end %>
         <% end %>
-      </datalist>
+      <% end %>
     </form>
     """
   end
