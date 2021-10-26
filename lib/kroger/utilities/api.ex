@@ -37,18 +37,15 @@ defmodule Kroger.Utilities.Api do
     case request(http_request) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         %{"data" => decoded_body} = Jason.decode!(body)
-        decoded_body
+        {:ok, decoded_body}
 
-      {:ok, %HTTPoison.Response{status_code: 401}} ->
+      {:ok, %HTTPoison.Response{status_code: 401} = error} ->
         refresh_token(user_token)
-
-        # __MODULE__.call(user_token, params)
-
-      {:ok, e} ->
-        {:error, e}
+        decoded_body = Jason.decode!(error.body)
+        {:error, decoded_body["error_description"]}
 
       {:error, e} ->
-        {:error, e}
+        {:error, e.body["error_description"]}
     end
   end
 

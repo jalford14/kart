@@ -5,7 +5,7 @@ defmodule KartWeb.ProductsLive do
 
   @impl true
   def mount(_params, %{"user_token" => user_token} = _session, socket) do
-    {:ok, assign(socket, query: nil, products: [], user_token: user_token)}
+    {:ok, assign(socket, query: nil, products: [], error: nil, user_token: user_token)}
   end
 
   @impl true
@@ -18,15 +18,21 @@ defmodule KartWeb.ProductsLive do
     products = socket.assigns[:user_token]
                |> ProductSearch.call(%{"filter.term" => query, "filter.locationId" => "01100461", "filter.limit" => 5})
 
-    IO.inspect(products)
-    {:noreply, assign(socket, products: products)}
+    case products do
+      {:ok, products} ->
+        {:noreply, assign(socket, products: products)}
+        
+      {:error, error} -> 
+        {:noreply, assign(socket, error: error)}
+    end
   end
 
   def render(assigns) do
     ~L"""
     <form phx-change="search">
       <input phx-debounce="1000" type="text" name="query" value="<%= @query %>" placeholder="Search..."/>
-      <p> Products <%= for product <- @products do %> </p>
+      <p> Products </p>
+      <%= for product <- @products do %>
         <%= product["brand"] %>
         <%= product["description"] %>
         <%= product["productId"] %>
@@ -39,6 +45,10 @@ defmodule KartWeb.ProductsLive do
             <% end %>
           <% end %>
         <% end %>
+      <% end %>
+      <%= if @error do %>
+        <h1>Errors</h1>
+        <p style="color: red"><%= @error %></p>
       <% end %>
     </form>
     """
