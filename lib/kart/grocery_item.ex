@@ -15,7 +15,7 @@ defmodule Kart.GroceryItem do
   @doc false
   def changeset(grocery_item, attrs) do
     grocery_item
-    |> cast(attrs, [:product_id, :brand, :description, :image_url])
-    |> validate_required([:product_id, :brand, :description, :image_url])
+    |> cast(attrs, [:product_id, :brand, :description, :image_url, :grocery_list_id])
+    |> validate_required([:product_id, :brand, :description, :image_url, :grocery_list_id])
   end
 end

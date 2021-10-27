@@ -10,5 +10,10 @@
         Search Products
       </a>
     </li>
+    <li>
+      <a href="/lists">
+        Grocery Lists
+      </a>
+    </li>
   </ul>
 </section>
