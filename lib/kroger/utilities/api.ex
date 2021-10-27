@@ -97,7 +97,7 @@ defmodule Kroger.Utilities.Api do
       serializers: %{"application/json" => Jason},
       params: %{
         response_type: "code",
-        scope: "product.compact"
+        scope: "product.compact cart.basic:write"
       }
     )
   end
