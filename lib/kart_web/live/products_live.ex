@@ -18,7 +18,7 @@ defmodule KartWeb.ProductsLive do
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     if String.length(query) < 3 do
-      {:noreply, assign(socket, error: "Search term must be 3 or more characters" )}
+      {:noreply, assign(socket, products: [], error: "Search term must be 3 or more characters")}
     else
       products =
         socket.assigns[:user_token]
@@ -30,10 +30,10 @@ defmodule KartWeb.ProductsLive do
 
       case products do
         {:ok, products} ->
-          {:noreply, assign(socket, products: products)}
+          {:noreply, assign(socket, products: products, error: nil)}
 
         {:error, error} ->
-          {:noreply, assign(socket, error: error)}
+          {:noreply, assign(socket, products: [], error: error)}
       end
     end
   end
