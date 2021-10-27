@@ -2,10 +2,6 @@ defmodule KartWeb.OauthController do
   use KartWeb, :controller
   import Phoenix.Controller
 
-  alias Kart.Repo
-  alias Kart.User
-  alias Kart.Accounts
-  alias Kart.OauthToken
   alias Kroger.Utilities.Api
 
   def index(conn, _params) do

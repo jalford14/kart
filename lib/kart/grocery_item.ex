@@ -1,6 +1,10 @@
 defmodule Kart.GroceryItem do
   use Ecto.Schema
+
+  import Ecto.Query
   import Ecto.Changeset
+
+  alias Kart.Repo
 
   schema "grocery_items" do
     field :brand, :string
@@ -10,6 +14,14 @@ defmodule Kart.GroceryItem do
     field :grocery_list_id, :id
 
     timestamps()
+  end
+
+  def get_list_items_by_id(list_id) do
+    query =
+      from item in __MODULE__,
+        where: item.grocery_list_id == ^list_id
+
+    Repo.all(query)
   end
 
   @doc false

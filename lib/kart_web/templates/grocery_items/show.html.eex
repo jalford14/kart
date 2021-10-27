@@ -1,0 +1,11 @@
+<p>Items!</p>
+
+<%= for item <- @items do %>
+  <p>
+    <%= item.brand %>
+    <%= item.description %>
+    <%= item.product_id %>
+    <img src="<%= item.image_url%>">
+  </p>
+<% end %>
+

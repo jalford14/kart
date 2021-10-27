@@ -1,0 +1,7 @@
+<h1>Grocery Lists</h1>
+
+<%= for list <- @lists do %>
+  <p>
+    <a href="/lists/<%= list.id %>/products"><%= list.name %></a>
+  </p>
+<% end %>
