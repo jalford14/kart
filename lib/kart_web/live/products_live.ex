@@ -17,20 +17,24 @@ defmodule KartWeb.ProductsLive do
 
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
-    products =
-      socket.assigns[:user_token]
-      |> ProductSearch.call(%{
-        "filter.term" => query,
-        "filter.locationId" => "01100461",
-        "filter.limit" => 5
-      })
+    if String.length(query) < 3 do
+      {:noreply, assign(socket, error: "Search term must be 3 or more characters" )}
+    else
+      products =
+        socket.assigns[:user_token]
+        |> ProductSearch.call(%{
+          "filter.term" => query,
+          "filter.locationId" => "01100461",
+          "filter.limit" => 5
+        })
 
-    case products do
-      {:ok, products} ->
-        {:noreply, assign(socket, products: products)}
+      case products do
+        {:ok, products} ->
+          {:noreply, assign(socket, products: products)}
 
-      {:error, error} ->
-        {:noreply, assign(socket, error: error)}
+        {:error, error} ->
+          {:noreply, assign(socket, error: error)}
+      end
     end
   end
 
