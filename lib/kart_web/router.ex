@@ -55,6 +55,8 @@ defmodule KartWeb.Router do
     get "/lists", GroceryListsController, :index
     get "/lists/:list_id/products", GroceryItemsController, :show
 
+    get "/cart", CartController, :index
+
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
