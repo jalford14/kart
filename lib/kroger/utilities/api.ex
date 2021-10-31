@@ -14,6 +14,7 @@ defmodule Kroger.Utilities.Api do
       params: params,
       headers: headers(user_token)
     }
+    Poison.encode!
     |> execute(user_token)
   end
 
@@ -21,7 +22,7 @@ defmodule Kroger.Utilities.Api do
     %HTTPoison.Request{
       method: :put,
       url: "https://api.kroger.com/v1/cart/add",
-      body: body,
+      body: Jason.encode!(body),
       headers: headers(user_token)
     }
     |> execute(user_token)

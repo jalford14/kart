@@ -53,9 +53,9 @@ defmodule KartWeb.Router do
     live "/search", ProductsLive, :index
 
     get "/lists", GroceryListsController, :index
-    get "/lists/:list_id/products", GroceryItemsController, :show
+    get "/cart", GroceryListsController, :add_to_cart
 
-    get "/cart", CartController, :index
+    get "/lists/:list_id/products", GroceryItemsController, :show
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
