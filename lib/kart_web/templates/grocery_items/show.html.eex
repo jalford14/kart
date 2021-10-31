@@ -1,5 +1,7 @@
 <p>Items!</p>
 
+<a href="/cart">Add to Cart</a>
+
 <%= for item <- @items do %>
   <p>
     <%= item.brand %>

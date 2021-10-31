@@ -7,12 +7,23 @@ defmodule Kroger.Utilities.Api do
   alias Kart.OauthToken
   alias Kroger.Utilities.Api
 
-  def make_request(user_token, path, params) do
+  def product_search(params, user_token) do
     %HTTPoison.Request{
       method: :get,
-      url: url_base <> path,
-      headers: headers(user_token),
-      params: params
+      url: "https://api.kroger.com/v1/products",
+      params: params,
+      headers: headers(user_token)
+    }
+    Poison.encode!
+    |> execute(user_token)
+  end
+
+  def add_to_cart!(body, user_token) do
+    %HTTPoison.Request{
+      method: :put,
+      url: "https://api.kroger.com/v1/cart/add",
+      body: Jason.encode!(body),
+      headers: headers(user_token)
     }
     |> execute(user_token)
   end
@@ -38,6 +49,9 @@ defmodule Kroger.Utilities.Api do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         %{"data" => decoded_body} = Jason.decode!(body)
         {:ok, decoded_body}
+
+      {:ok, %HTTPoison.Response{status_code: 204, body: body}} ->
+        {:ok, body}
 
       {:ok, %HTTPoison.Response{status_code: 401} = error} ->
         refresh_token(user_token)
@@ -100,10 +114,6 @@ defmodule Kroger.Utilities.Api do
         scope: "product.compact cart.basic:write"
       }
     )
-  end
-
-  defp url_base do
-    "https://api.kroger.com/v1"
   end
 
   defp headers(user_token) do
