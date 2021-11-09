@@ -23,3 +23,6 @@ config :kart, KartWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :kart, http_client: HTTPoison.MockBase
+config :kart, oauth_token: Kart.MockOauthToken

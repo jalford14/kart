@@ -28,6 +28,9 @@ config :phoenix, :json_library, Jason
 
 config :oauth2, debug: true
 
+config :kart, http_client: HTTPoison
+config :kart, oauth_token: Kart.OauthToken
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
