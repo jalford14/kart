@@ -13,8 +13,9 @@ defmodule Kart.OauthToken do
     timestamps()
   end
 
+  @callback get_access_token_by_user(Ecto.Schema.t()) :: String.t()
   def get_access_token_by_user(user) do
-    Repo.get_by(Kart.OauthToken, user_id: 1).access_token
+    Repo.get_by(Kart.OauthToken, user_id: user.id).access_token
   end
 
   @doc false

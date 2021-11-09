@@ -17,9 +17,8 @@ defmodule KartWeb.GroceryListsController do
   end
 
   def add_to_cart(conn, _params) do
-    resp =
-      GroceryItem.get_list_items_by_id(2)
-      |> AddToCart.call(get_session(conn, :user_token))
+    GroceryItem.get_list_items_by_id(2)
+    |> AddToCart.call(get_session(conn, :user_token))
 
     redirect(conn, external: "https://www.kroger.com/cart")
   end
