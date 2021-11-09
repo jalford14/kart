@@ -1,5 +1,6 @@
 defmodule Kroger.Utilities.Api do
-  use HTTPoison.Base
+  @oauth_token Application.get_env(:kart, :oauth_token)
+  @http_client Application.get_env(:kart, :http_client)
 
   alias Kart.Repo
   alias Kart.User
@@ -14,7 +15,6 @@ defmodule Kroger.Utilities.Api do
       params: params,
       headers: headers(user_token)
     }
-    Poison.encode!
     |> execute(user_token)
   end
 
@@ -28,11 +28,6 @@ defmodule Kroger.Utilities.Api do
     |> execute(user_token)
   end
 
-  def get_user_access_token(user_token) do
-    Accounts.get_user_by_session_token(user_token)
-    |> OauthToken.get_access_token_by_user()
-  end
-
   def authorize_url! do
     OAuth2.Client.authorize_url!(client())
   end
@@ -44,8 +39,13 @@ defmodule Kroger.Utilities.Api do
     |> persist_token(user)
   end
 
+  defp get_user_access_token(user_token) do
+    Accounts.get_user_by_session_token(user_token)
+    |> @oauth_token.get_access_token_by_user()
+  end
+
   defp execute(http_request, user_token) do
-    case request(http_request) do
+    case @http_client.request(http_request) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         %{"data" => decoded_body} = Jason.decode!(body)
         {:ok, decoded_body}
@@ -95,9 +95,6 @@ defmodule Kroger.Utilities.Api do
 
   defp get_user_by_session_token(user_token) do
     Accounts.get_user_by_session_token(user_token)
-  end
-
-  defp format_response(%{"data" => body} = _response) do
   end
 
   defp client do
